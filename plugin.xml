@@ -62,6 +62,8 @@
         <source-file src="src/android/res/drawable/ic_chevron_left_white_24dp.xml" target-dir="res/drawable"/>
         <source-file src="src/android/res/drawable/ic_chevron_right_white_24dp.xml" target-dir="res/drawable"/>
         <source-file src="src/android/res/drawable/ic_close_white_24dp.xml" target-dir="res/drawable"/>
+        <source-file src="src/android/res/drawable/ic_error_red_24dp.xml" target-dir="res/drawable"/>
+        <source-file src="src/android/res/drawable/ic_format_size_white_24dp.xml" target-dir="res/drawable"/>
         <source-file src="src/android/res/drawable/ic_link_white_24dp.xml" target-dir="res/drawable"/>
         <source-file src="src/android/res/drawable/ic_search_white_24dp.xml" target-dir="res/drawable"/>
         <source-file src="src/android/res/drawable/ic_toc_white_24dp.xml" target-dir="res/drawable"/>
