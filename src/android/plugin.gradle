@@ -1,11 +1,6 @@
 repositories {
     jcenter() // needed to resolve mupdf
     maven { url 'https://maven.ghostscript.com' } // needed to resolve androidwm-light (non più disponibile, ma mantenuto per compatibilità)
-    
-    // Repository locale per androidwm-light (copiato automaticamente in libs/ dal plugin.xml)
-    flatDir {
-        dirs 'libs'
-    }
 }
 
 dependencies {
@@ -13,7 +8,8 @@ dependencies {
 
     // Utilizzo della libreria locale invece della dipendenza Maven
     // Il file .aar viene copiato automaticamente in libs/ durante l'installazione del plugin
-    implementation(name: 'androidwm-light-0.1.2', ext: 'aar')
+    // Usa files() direttamente invece di flatDir per evitare warning
+    implementation files('libs/androidwm-light-0.1.2.aar')
     // implementation 'com.huangyz0918:androidwm-light:0.1.2' // Originale Maven (non più disponibile, ripristinare se torna disponibile)
 
     api 'com.artifex.mupdf:fitz:1.26.10'
