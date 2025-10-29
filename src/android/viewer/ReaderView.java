@@ -23,6 +23,8 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Scroller;
 
+import net.kuama.pdf.RHelper;
+
 public class ReaderView
 		extends AdapterView<Adapter>
 		implements GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener, Runnable {
@@ -780,7 +782,7 @@ public class ReaderView
 
 	@Override
 	public void setSelection(int arg0) {
-		throw new UnsupportedOperationException(getContext().getString(R.string.not_supported));
+		throw new UnsupportedOperationException(getContext().getString(RHelper.getStringId(getContext(), "not_supported")));
 	}
 
 	private View getCached() {

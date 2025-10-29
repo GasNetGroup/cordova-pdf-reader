@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import net.kuama.pdf.RHelper;
+
 class ProgressDialogX extends ProgressDialog {
 	public ProgressDialogX(Context context) {
 		super(context);
@@ -64,7 +66,7 @@ public abstract class SearchTask {
 
 		final ProgressDialogX progressDialog = new ProgressDialogX(mContext);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progressDialog.setTitle(mContext.getString(R.string.searching_));
+		progressDialog.setTitle(mContext.getString(RHelper.getStringId(mContext, "searching_")));
 		progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 			public void onCancel(DialogInterface dialog) {
 				stop();
@@ -95,9 +97,12 @@ public abstract class SearchTask {
 				if (result != null) {
 					onTextFound(result);
 				} else {
-					mAlertBuilder.setTitle(SearchTaskResult.get() == null ? R.string.text_not_found : R.string.no_further_occurrences_found);
+					int titleId = SearchTaskResult.get() == null 
+						? RHelper.getStringId(mContext, "text_not_found")
+						: RHelper.getStringId(mContext, "no_further_occurrences_found");
+					mAlertBuilder.setTitle(mContext.getString(titleId));
 					AlertDialog alert = mAlertBuilder.create();
-					alert.setButton(AlertDialog.BUTTON_POSITIVE, mContext.getString(R.string.dismiss),
+					alert.setButton(AlertDialog.BUTTON_POSITIVE, mContext.getString(RHelper.getStringId(mContext, "dismiss")),
 							(DialogInterface.OnClickListener)null);
 					alert.show();
 				}

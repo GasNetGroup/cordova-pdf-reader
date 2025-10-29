@@ -41,6 +41,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.os.AsyncTask;
 
+import net.kuama.pdf.RHelper;
+
 // Make our ImageViews opaque to optimize redraw
 class OpaqueImageView extends ImageView {
 
@@ -216,7 +218,7 @@ public class PageView extends ViewGroup {
 			mErrorIndicator = new OpaqueImageView(mContext);
 			mErrorIndicator.setScaleType(ImageView.ScaleType.CENTER);
 			addView(mErrorIndicator);
-			Drawable mErrorIcon = getResources().getDrawable(R.drawable.ic_error_red_24dp);
+			Drawable mErrorIcon = getResources().getDrawable(RHelper.getDrawableId(getContext(), "ic_error_red_24dp"));
 			mErrorIndicator.setImageDrawable(mErrorIcon);
 			mErrorIndicator.setBackgroundColor(BACKGROUND_COLOR);
 		}

@@ -36,6 +36,9 @@
         <!-- plugin bridge -->
         <source-file src="src/android/PdfReader.java" target-dir="src/net/kuama/pdf"/>
 
+        <!-- helper class for resources -->
+        <source-file src="src/android/RHelper.java" target-dir="src/net/kuama/pdf"/>
+
         <!-- pdf renderer activity -->
         <source-file src="src/android/PdfActivity.java" target-dir="src/net/kuama/pdf"/>
 
@@ -48,6 +51,7 @@
         <source-file src="src/android/viewer/OutlineActivity.java" target-dir="src/net/kuama/pdf/viewer"/>
         <source-file src="src/android/viewer/PageAdapter.java" target-dir="src/net/kuama/pdf/viewer"/>
         <source-file src="src/android/viewer/PageView.java" target-dir="src/net/kuama/pdf/viewer"/>
+        <source-file src="src/android/viewer/Pallet.java" target-dir="src/net/kuama/pdf/viewer"/>
         <source-file src="src/android/viewer/ReaderView.java" target-dir="src/net/kuama/pdf/viewer"/>
         <source-file src="src/android/viewer/SearchTask.java" target-dir="src/net/kuama/pdf/viewer"/>
         <source-file src="src/android/viewer/SearchTaskResult.java" target-dir="src/net/kuama/pdf/viewer"/>

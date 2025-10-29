@@ -148,11 +148,9 @@ public class PdfActivity extends AppCompatActivity {
 
         if (core == null) {
             AlertDialog alert = mAlertBuilder.create();
-            int cannotOpenDocumentIdentifier = getResources().getIdentifier("cannot_open_document", "string", getPackageName());
-            alert.setTitle(cannotOpenDocumentIdentifier);
+            alert.setTitle(getString(RHelper.getStringId(this, "cannot_open_document")));
 
-            int dismissIdentifier = getResources().getIdentifier("dismiss", "string", getPackageName());
-            alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(dismissIdentifier),
+            alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(RHelper.getStringId(this, "dismiss")),
                     (dialog, which) -> finish());
             alert.setOnCancelListener(dialog -> finish());
             alert.show();
@@ -537,46 +535,34 @@ public class PdfActivity extends AppCompatActivity {
     }
 
     private void makeButtonsView() {
-        int layoutIdentifier = getResources().getIdentifier("layout/document_activity", null, getPackageName());
-        mButtonsView = getLayoutInflater().inflate(layoutIdentifier, null);
+        mButtonsView = getLayoutInflater().inflate(RHelper.getLayoutId(this, "document_activity"), null);
 
-        int backButtonIdentifier = getResources().getIdentifier("id/backButton", null, getPackageName());
-        ImageButton backBtn = mButtonsView.findViewById(backButtonIdentifier);
+        ImageButton backBtn = mButtonsView.findViewById(RHelper.getId(this, "backButton"));
 
         backBtn.setOnClickListener(v -> {
             setResult(RESULT_OK);
             finish();
         });
 
-        int docNameTextIdentifier = getResources().getIdentifier("id/docNameText", null, getPackageName());
-        mFilenameView = mButtonsView.findViewById(docNameTextIdentifier);
+        mFilenameView = mButtonsView.findViewById(RHelper.getId(this, "docNameText"));
 
-        int pageSliderIdentifier = getResources().getIdentifier("id/pageSlider", null, getPackageName());
-        mPageSlider = mButtonsView.findViewById(pageSliderIdentifier);
+        mPageSlider = mButtonsView.findViewById(RHelper.getId(this, "pageSlider"));
 
-        int pageNumberIdentifier = getResources().getIdentifier("id/pageNumber", null, getPackageName());
-        mPageNumberView = mButtonsView.findViewById(pageNumberIdentifier);
+        mPageNumberView = mButtonsView.findViewById(RHelper.getId(this, "pageNumber"));
 
-        int searchButtonIdentifier = getResources().getIdentifier("id/searchButton", null, getPackageName());
-        mSearchButton = mButtonsView.findViewById(searchButtonIdentifier);
+        mSearchButton = mButtonsView.findViewById(RHelper.getId(this, "searchButton"));
 
-        int outlineButtonIdentifier = getResources().getIdentifier("id/outlineButton", null, getPackageName());
-        mOutlineButton = mButtonsView.findViewById(outlineButtonIdentifier);
+        mOutlineButton = mButtonsView.findViewById(RHelper.getId(this, "outlineButton"));
 
-        int switcherIdentifier = getResources().getIdentifier("id/switcher", null, getPackageName());
-        mTopBarSwitcher = mButtonsView.findViewById(switcherIdentifier);
+        mTopBarSwitcher = mButtonsView.findViewById(RHelper.getId(this, "switcher"));
 
-        int searchBackIdentifier = getResources().getIdentifier("id/searchBack", null, getPackageName());
-        mSearchBack = mButtonsView.findViewById(searchBackIdentifier);
+        mSearchBack = mButtonsView.findViewById(RHelper.getId(this, "searchBack"));
 
-        int searchForwardIdentifier = getResources().getIdentifier("id/searchForward", null, getPackageName());
-        mSearchFwd = mButtonsView.findViewById(searchForwardIdentifier);
+        mSearchFwd = mButtonsView.findViewById(RHelper.getId(this, "searchForward"));
 
-        int searchCloseIdentifier = getResources().getIdentifier("id/searchClose", null, getPackageName());
-        mSearchClose = mButtonsView.findViewById(searchCloseIdentifier);
+        mSearchClose = mButtonsView.findViewById(RHelper.getId(this, "searchClose"));
 
-        int searchTextIdentifier = getResources().getIdentifier("id/searchText", null, getPackageName());
-        mSearchText = mButtonsView.findViewById(searchTextIdentifier);
+        mSearchText = mButtonsView.findViewById(RHelper.getId(this, "searchText"));
 
         mTopBarSwitcher.setVisibility(View.INVISIBLE);
         mPageNumberView.setVisibility(View.INVISIBLE);

@@ -50,6 +50,8 @@ import android.widget.ViewAnimator;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import net.kuama.pdf.RHelper;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -181,8 +183,8 @@ public class DocumentActivity extends Activity
 	private void showCannotOpenDialog(String reason) {
 		Resources res = getResources();
 		AlertDialog alert = mAlertBuilder.create();
-		setTitle(String.format(Locale.ROOT, res.getString(R.string.cannot_open_document_Reason), reason));
-		alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dismiss),
+		setTitle(String.format(Locale.ROOT, res.getString(RHelper.getStringId(this, "cannot_open_document_Reason")), reason));
+		alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(RHelper.getStringId(this, "dismiss")),
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						finish();
@@ -291,8 +293,8 @@ public class DocumentActivity extends Activity
 		if (core == null)
 		{
 			AlertDialog alert = mAlertBuilder.create();
-			alert.setTitle(R.string.cannot_open_document);
-			alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dismiss),
+			alert.setTitle(getString(RHelper.getStringId(this, "cannot_open_document")));
+			alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(RHelper.getStringId(this, "dismiss")),
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							finish();
@@ -317,9 +319,9 @@ public class DocumentActivity extends Activity
 		mPasswordView.setTransformationMethod(new PasswordTransformationMethod());
 
 		AlertDialog alert = mAlertBuilder.create();
-		alert.setTitle(R.string.enter_password);
+		alert.setTitle(getString(RHelper.getStringId(this, "enter_password")));
 		alert.setView(mPasswordView);
-		alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.okay),
+		alert.setButton(AlertDialog.BUTTON_POSITIVE, getString(RHelper.getStringId(this, "okay")),
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						if (core.authenticatePassword(mPasswordView.getText().toString())) {
@@ -329,7 +331,7 @@ public class DocumentActivity extends Activity
 						}
 					}
 				});
-		alert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel),
+		alert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(RHelper.getStringId(this, "cancel")),
 				new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
@@ -512,22 +514,22 @@ public class DocumentActivity extends Activity
 		if (core.isReflowable()) {
 			mLayoutButton.setVisibility(View.VISIBLE);
 			mLayoutPopupMenu = new PopupMenu(this, mLayoutButton);
-			mLayoutPopupMenu.getMenuInflater().inflate(R.menu.layout_menu, mLayoutPopupMenu.getMenu());
+			mLayoutPopupMenu.getMenuInflater().inflate(RHelper.getMenuId(this, "layout_menu"), mLayoutPopupMenu.getMenu());
 			mLayoutPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 				public boolean onMenuItemClick(MenuItem item) {
 					float oldLayoutEM = mLayoutEM;
 					int id = item.getItemId();
-					if (id == R.id.action_layout_6pt) mLayoutEM = 6;
-					else if (id == R.id.action_layout_7pt) mLayoutEM = 7;
-					else if (id == R.id.action_layout_8pt) mLayoutEM = 8;
-					else if (id == R.id.action_layout_9pt) mLayoutEM = 9;
-					else if (id == R.id.action_layout_10pt) mLayoutEM = 10;
-					else if (id == R.id.action_layout_11pt) mLayoutEM = 11;
-					else if (id == R.id.action_layout_12pt) mLayoutEM = 12;
-					else if (id == R.id.action_layout_13pt) mLayoutEM = 13;
-					else if (id == R.id.action_layout_14pt) mLayoutEM = 14;
-					else if (id == R.id.action_layout_15pt) mLayoutEM = 15;
-					else if (id == R.id.action_layout_16pt) mLayoutEM = 16;
+					if (id == RHelper.getId(DocumentActivity.this, "action_layout_6pt")) mLayoutEM = 6;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_7pt")) mLayoutEM = 7;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_8pt")) mLayoutEM = 8;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_9pt")) mLayoutEM = 9;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_10pt")) mLayoutEM = 10;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_11pt")) mLayoutEM = 11;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_12pt")) mLayoutEM = 12;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_13pt")) mLayoutEM = 13;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_14pt")) mLayoutEM = 14;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_15pt")) mLayoutEM = 15;
+					else if (id == RHelper.getId(DocumentActivity.this, "action_layout_16pt")) mLayoutEM = 16;
 					if (oldLayoutEM != mLayoutEM)
 						relayoutDocument();
 					return true;
@@ -760,19 +762,19 @@ public class DocumentActivity extends Activity
 	}
 
 	private void makeButtonsView() {
-		mButtonsView = getLayoutInflater().inflate(R.layout.document_activity, null);
-		mDocNameView = (TextView)mButtonsView.findViewById(R.id.docNameText);
-		mPageSlider = (SeekBar)mButtonsView.findViewById(R.id.pageSlider);
-		mPageNumberView = (TextView)mButtonsView.findViewById(R.id.pageNumber);
-		mSearchButton = (ImageButton)mButtonsView.findViewById(R.id.searchButton);
-		mOutlineButton = (ImageButton)mButtonsView.findViewById(R.id.outlineButton);
-		mTopBarSwitcher = (ViewAnimator)mButtonsView.findViewById(R.id.switcher);
-		mSearchBack = (ImageButton)mButtonsView.findViewById(R.id.searchBack);
-		mSearchFwd = (ImageButton)mButtonsView.findViewById(R.id.searchForward);
-		mSearchClose = (ImageButton)mButtonsView.findViewById(R.id.searchClose);
-		mSearchText = (EditText)mButtonsView.findViewById(R.id.searchText);
-		mLinkButton = (ImageButton)mButtonsView.findViewById(R.id.linkButton);
-		mLayoutButton = mButtonsView.findViewById(R.id.layoutButton);
+		mButtonsView = getLayoutInflater().inflate(RHelper.getLayoutId(this, "document_activity"), null);
+		mDocNameView = (TextView)mButtonsView.findViewById(RHelper.getId(this, "docNameText"));
+		mPageSlider = (SeekBar)mButtonsView.findViewById(RHelper.getId(this, "pageSlider"));
+		mPageNumberView = (TextView)mButtonsView.findViewById(RHelper.getId(this, "pageNumber"));
+		mSearchButton = (ImageButton)mButtonsView.findViewById(RHelper.getId(this, "searchButton"));
+		mOutlineButton = (ImageButton)mButtonsView.findViewById(RHelper.getId(this, "outlineButton"));
+		mTopBarSwitcher = (ViewAnimator)mButtonsView.findViewById(RHelper.getId(this, "switcher"));
+		mSearchBack = (ImageButton)mButtonsView.findViewById(RHelper.getId(this, "searchBack"));
+		mSearchFwd = (ImageButton)mButtonsView.findViewById(RHelper.getId(this, "searchForward"));
+		mSearchClose = (ImageButton)mButtonsView.findViewById(RHelper.getId(this, "searchClose"));
+		mSearchText = (EditText)mButtonsView.findViewById(RHelper.getId(this, "searchText"));
+		mLinkButton = (ImageButton)mButtonsView.findViewById(RHelper.getId(this, "linkButton"));
+		mLayoutButton = mButtonsView.findViewById(RHelper.getId(this, "layoutButton"));
 		mTopBarSwitcher.setVisibility(View.INVISIBLE);
 		mPageNumberView.setVisibility(View.INVISIBLE);
 
