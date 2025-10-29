@@ -22,6 +22,13 @@
 			android:background="@color/toolbar"
 			>
 
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:src="@drawable/ic_chevron_left_white_24dp" />
+
 			<TextView
 				android:id="@+id/docNameText"
 				android:layout_width="0dp"
