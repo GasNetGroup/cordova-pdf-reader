@@ -41,6 +41,7 @@ import com.watermark.androidwm_light.bean.WatermarkText;
 
 import net.kuama.pdf.viewer.MuPDFCore;
 import net.kuama.pdf.viewer.OutlineActivity;
+import net.kuama.pdf.viewer.Pallet;
 import net.kuama.pdf.viewer.PageAdapter;
 import net.kuama.pdf.viewer.PageView;
 import net.kuama.pdf.viewer.ReaderView;
@@ -323,7 +324,7 @@ public class PdfActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putInt("POSITION", mDocView.getDisplayedViewIndex());
                         bundle.putSerializable("OUTLINE", mFlatOutline);
-                        intent.putExtras(bundle);
+                        intent.putExtra("PALLETBUNDLE", Pallet.sendBundle(bundle));
                         startActivityForResult(intent, OUTLINE_REQUEST);
                     }
                 }

@@ -64,6 +64,10 @@ public class PageView extends ViewGroup {
 	private static final int BACKGROUND_COLOR = 0xFFFFFFFF;
 	private static final int PROGRESS_DIALOG_DELAY = 200;
 
+	public interface OnAfterImageRenderedListener {
+		void afterRender(ImageView mEntire);
+	}
+
 	protected final Context mContext;
 
 	protected     int       mPageNumber;
@@ -92,6 +96,7 @@ public class PageView extends ViewGroup {
 
 	private       ProgressBar mBusyIndicator;
 	private final Handler   mHandler = new Handler();
+	private       OnAfterImageRenderedListener mAfterViewRenderedHandler;
 
 	public PageView(Context c, MuPDFCore core, Point parentSize, Bitmap sharedHqBm) {
 		super(c);
@@ -304,6 +309,10 @@ public class PageView extends ViewGroup {
 					clearRenderError();
 					mEntire.setImageBitmap(mEntireBm);
 					mEntire.invalidate();
+					// Call the after render handler if set
+					if (mAfterViewRenderedHandler != null) {
+						mAfterViewRenderedHandler.afterRender(mEntire);
+					}
 				} else {
 					setRenderError("Error rendering page");
 				}
@@ -545,6 +554,10 @@ public class PageView extends ViewGroup {
 					clearRenderError();
 					mEntire.setImageBitmap(mEntireBm);
 					mEntire.invalidate();
+					// Call the after render handler if set
+					if (mAfterViewRenderedHandler != null) {
+						mAfterViewRenderedHandler.afterRender(mEntire);
+					}
 				} else {
 					setRenderError("Error updating page");
 				}
@@ -668,5 +681,13 @@ public class PageView extends ViewGroup {
 		} catch (RuntimeException e) {
 			return null;
 		}
+	}
+
+	public void setmAfterViewRenderedHandler(OnAfterImageRenderedListener handler) {
+		mAfterViewRenderedHandler = handler;
+	}
+
+	public Bitmap getmEntireBm() {
+		return mEntireBm;
 	}
 }
