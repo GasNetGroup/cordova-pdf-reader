@@ -1,134 +1,133 @@
 package net.kuama.pdf.viewer;
 
+import com.artifex.mupdf.fitz.Quad;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Handler;
-
-import com.artifex.mupdf.fitz.Quad;
+import android.os.AsyncTask;
+import android.util.Log;
 
 class ProgressDialogX extends ProgressDialog {
-    public ProgressDialogX(Context context) {
-        super(context);
-    }
+	public ProgressDialogX(Context context) {
+		super(context);
+	}
 
-    private boolean mCancelled = false;
+	private boolean mCancelled = false;
 
-    public boolean isCancelled() {
-        return mCancelled;
-    }
+	public boolean isCancelled() {
+		return mCancelled;
+	}
 
-    @Override
-    public void cancel() {
-        mCancelled = true;
-        super.cancel();
-    }
+	@Override
+	public void cancel() {
+		mCancelled = true;
+		super.cancel();
+	}
 }
 
 public abstract class SearchTask {
-    private static final int SEARCH_PROGRESS_DELAY = 200;
-    private final Context mContext;
-    private final MuPDFCore mCore;
-    private final Handler mHandler;
-    private final AlertDialog.Builder mAlertBuilder;
-    private AsyncTask<Void, Integer, SearchTaskResult> mSearchTask;
+	private final String APP = "MuPDF";
 
-    public SearchTask(Context context, MuPDFCore core) {
-        mContext = context;
-        mCore = core;
-        mHandler = new Handler();
-        mAlertBuilder = new AlertDialog.Builder(context);
-    }
+	private static final int SEARCH_PROGRESS_DELAY = 200;
+	private final Context mContext;
+	private final MuPDFCore mCore;
+	private final Handler mHandler;
+	private final AlertDialog.Builder mAlertBuilder;
+	private AsyncTask<Void,Integer,SearchTaskResult> mSearchTask;
 
-    protected abstract void onTextFound(SearchTaskResult result);
+	public SearchTask(Context context, MuPDFCore core) {
+		mContext = context;
+		mCore = core;
+		mHandler = new Handler();
+		mAlertBuilder = new AlertDialog.Builder(context);
+	}
 
-    public void stop() {
-        if (mSearchTask != null) {
-            mSearchTask.cancel(true);
-            mSearchTask = null;
-        }
-    }
+	protected abstract void onTextFound(SearchTaskResult result);
 
-    public void go(final String text, int direction, int displayPage, int searchPage) {
-        if (mCore == null)
-            return;
-        stop();
+	public void stop() {
+		if (mSearchTask != null) {
+			mSearchTask.cancel(true);
+			mSearchTask = null;
+		}
+	}
 
-        final int increment = direction;
-        final int startIndex = searchPage == -1 ? displayPage : searchPage + increment;
+	public void go(final String text, int direction, int displayPage, int searchPage) {
+		if (mCore == null)
+			return;
+		stop();
 
-        final ProgressDialogX progressDialog = new ProgressDialogX(mContext);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		final int increment = direction;
+		final int startIndex = searchPage == -1 ? displayPage : searchPage + increment;
 
-        int searchTextIdentifier = mContext.getResources().getIdentifier("string/searching_", null, mContext.getPackageName());
-        progressDialog.setTitle(mContext.getString(searchTextIdentifier));
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            public void onCancel(DialogInterface dialog) {
-                stop();
-            }
-        });
-        progressDialog.setMax(mCore.countPages());
+		final ProgressDialogX progressDialog = new ProgressDialogX(mContext);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progressDialog.setTitle(mContext.getString(R.string.searching_));
+		progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			public void onCancel(DialogInterface dialog) {
+				stop();
+			}
+		});
+		progressDialog.setMax(mCore.countPages());
 
-        mSearchTask = new AsyncTask<Void, Integer, SearchTaskResult>() {
-            @Override
-            protected SearchTaskResult doInBackground(Void... params) {
-                int index = startIndex;
+		mSearchTask = new AsyncTask<Void,Integer,SearchTaskResult>() {
+			@Override
+			protected SearchTaskResult doInBackground(Void... params) {
+				int index = startIndex;
 
-                while (0 <= index && index < mCore.countPages() && !isCancelled()) {
-                    publishProgress(index);
-                    Quad searchHits[] = mCore.searchPage(index, text);
+				while (0 <= index && index < mCore.countPages() && !isCancelled()) {
+					publishProgress(index);
+					Quad searchHits[][] = mCore.searchPage(index, text);
 
-                    if (searchHits != null && searchHits.length > 0)
-                        return new SearchTaskResult(text, index, searchHits);
+					if (searchHits != null && searchHits.length > 0)
+						return new SearchTaskResult(text, index, searchHits);
 
-                    index += increment;
-                }
-                return null;
-            }
+					index += increment;
+				}
+				return null;
+			}
 
-            @Override
-            protected void onPostExecute(SearchTaskResult result) {
-                progressDialog.cancel();
-                if (result != null) {
-                    onTextFound(result);
-                } else {
-                    int notFountIdentifier = mContext.getResources().getIdentifier("string/text_not_found", null, mContext.getPackageName());
-                    int notMoreOccurencesIdentifier = mContext.getResources().getIdentifier("string/no_further_occurrences_found", null, mContext.getPackageName());
-                    int dismissIdentifier = mContext.getResources().getIdentifier("string/dismiss", null, mContext.getPackageName());
-                    mAlertBuilder.setTitle(SearchTaskResult.get() == null ? notFountIdentifier : notMoreOccurencesIdentifier);
-                    AlertDialog alert = mAlertBuilder.create();
-                    alert.setButton(AlertDialog.BUTTON_POSITIVE, mContext.getString(dismissIdentifier),
-                            (DialogInterface.OnClickListener) null);
-                    alert.show();
-                }
-            }
+			@Override
+			protected void onPostExecute(SearchTaskResult result) {
+				progressDialog.cancel();
+				if (result != null) {
+					onTextFound(result);
+				} else {
+					mAlertBuilder.setTitle(SearchTaskResult.get() == null ? R.string.text_not_found : R.string.no_further_occurrences_found);
+					AlertDialog alert = mAlertBuilder.create();
+					alert.setButton(AlertDialog.BUTTON_POSITIVE, mContext.getString(R.string.dismiss),
+							(DialogInterface.OnClickListener)null);
+					alert.show();
+				}
+			}
 
-            @Override
-            protected void onCancelled() {
-                progressDialog.cancel();
-            }
+			@Override
+			protected void onCancelled() {
+				progressDialog.cancel();
+			}
 
-            @Override
-            protected void onProgressUpdate(Integer... values) {
-                progressDialog.setProgress(values[0].intValue());
-            }
+			@Override
+			protected void onProgressUpdate(Integer... values) {
+				progressDialog.setProgress(values[0].intValue());
+			}
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                mHandler.postDelayed(new Runnable() {
-                    public void run() {
-                        if (!progressDialog.isCancelled()) {
-                            progressDialog.show();
-                            progressDialog.setProgress(startIndex);
-                        }
-                    }
-                }, SEARCH_PROGRESS_DELAY);
-            }
-        };
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				mHandler.postDelayed(new Runnable() {
+					public void run() {
+						if (!progressDialog.isCancelled())
+						{
+							progressDialog.show();
+							progressDialog.setProgress(startIndex);
+						}
+					}
+				}, SEARCH_PROGRESS_DELAY);
+			}
+		};
 
-        mSearchTask.execute();
-    }
+		mSearchTask.execute();
+	}
 }

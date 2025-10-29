@@ -8,5 +8,5 @@ dependencies {
 
     implementation 'com.huangyz0918:androidwm-light:0.1.2'
 
-    api 'com.artifex.mupdf:fitz:1.14.0'
+    api 'com.artifex.mupdf:fitz:1.26.10'
 }

@@ -4,13 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.os.AsyncTask;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.os.AsyncTask;
 
 public class PageAdapter extends BaseAdapter {
+	private final String APP = "MuPDF";
 	private final Context mContext;
 	private final MuPDFCore mCore;
 	private final SparseArray<PointF> mPageSizes = new SparseArray<PointF>();
@@ -22,7 +24,11 @@ public class PageAdapter extends BaseAdapter {
 	}
 
 	public int getCount() {
-		return mCore.countPages();
+		try {
+			return mCore.countPages();
+		} catch (RuntimeException e) {
+			return 0;
+		}
 	}
 
 	public Object getItem(int position) {
@@ -33,7 +39,7 @@ public class PageAdapter extends BaseAdapter {
 		return 0;
 	}
 
-	public void releaseBitmaps()
+	public synchronized void releaseBitmaps()
 	{
 		//  recycle and release the shared bitmap.
 		if (mSharedHqBm!=null)
@@ -41,11 +47,20 @@ public class PageAdapter extends BaseAdapter {
 		mSharedHqBm = null;
 	}
 
-	public View getView(final int position, View convertView, ViewGroup parent) {
+	public void refresh() {
+		mPageSizes.clear();
+	}
+
+	public synchronized View getView(final int position, View convertView, ViewGroup parent) {
 		final PageView pageView;
 		if (convertView == null) {
 			if (mSharedHqBm == null || mSharedHqBm.getWidth() != parent.getWidth() || mSharedHqBm.getHeight() != parent.getHeight())
-				mSharedHqBm = Bitmap.createBitmap(parent.getWidth(), parent.getHeight(), Bitmap.Config.ARGB_8888);
+			{
+				if (parent.getWidth() > 0 && parent.getHeight() > 0)
+					mSharedHqBm = Bitmap.createBitmap(parent.getWidth(), parent.getHeight(), Bitmap.Config.ARGB_8888);
+				else
+					mSharedHqBm = null;
+			}
 
 			pageView = new PageView(mContext, mCore, new Point(parent.getWidth(), parent.getHeight()), mSharedHqBm);
 		} else {
@@ -64,7 +79,11 @@ public class PageAdapter extends BaseAdapter {
 			AsyncTask<Void,Void,PointF> sizingTask = new AsyncTask<Void,Void,PointF>() {
 				@Override
 				protected PointF doInBackground(Void... arg0) {
-					return mCore.getPageSize(position);
+					try {
+						return mCore.getPageSize(position);
+					} catch (RuntimeException e) {
+						return null;
+					}
 				}
 
 				@Override
